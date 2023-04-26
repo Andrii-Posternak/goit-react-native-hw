@@ -22,11 +22,13 @@ export const styles = StyleSheet.create({
     borderTopLeftRadius: 25,
     borderTopRightRadius: 25,
     paddingHorizontal: 16,
-    paddingVertical: 32,
+    // paddingVertical: 32,
+    paddingTop: 92,
+    paddingBottom: 32,
     color: "red",
   },
 
-  title: {
+  titleForm: {
     fontFamily: "Roboto",
     fontStyle: "normal",
     fontWeight: "medium",
@@ -54,6 +56,11 @@ export const styles = StyleSheet.create({
     fontSize: 16,
     lineHeight: 19,
     color: "#212121",
+  },
+
+  inputFocus: {
+    borderColor: "#FF6C00",
+    backgroundColor: "#ffffff",
   },
 
   inputWrap: {

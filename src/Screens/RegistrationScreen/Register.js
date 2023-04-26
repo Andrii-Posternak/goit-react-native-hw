@@ -5,12 +5,15 @@ import {
   ImageBackground,
   Text,
   TextInput,
-  Button,
   TouchableOpacity,
 } from "react-native";
+import { AvatarForm } from "../../components/AvatarForm/AvatarForm";
 
 export const Register = () => {
   const [showPassword, setShowPassword] = useState(true);
+  const [inputFocusName, setInputFocusName] = useState(false);
+  const [inputFocusEmail, setInputFocusEmail] = useState(false);
+  const [inputFocusPassword, setInputFocusPassword] = useState(false);
 
   return (
     <View style={styles.container}>
@@ -19,28 +22,35 @@ export const Register = () => {
         source={require("../../images/background.png")}
       >
         <View style={styles.form}>
-          <Text style={styles.title}>Registration</Text>
+          <AvatarForm />
+          <Text style={styles.titleForm}>Registration</Text>
 
           <TextInput
-            style={styles.input}
-            cursorColor={"#212121"}
-            placeholder={"Login"}
-            placeholderTextColor={"#BDBDBD"}
+            style={[styles.input, inputFocusName && styles.inputFocus]}
+            cursorColor="#212121"
+            placeholder="Login"
+            placeholderTextColor="#BDBDBD"
+            onFocus={() => setInputFocusName(true)}
+            onBlur={() => setInputFocusName(false)}
           />
           <TextInput
-            style={styles.input}
-            cursorColor={"#212121"}
-            placeholder={"Email"}
-            placeholderTextColor={"#BDBDBD"}
+            style={[styles.input, inputFocusEmail && styles.inputFocus]}
+            cursorColor="#212121"
+            placeholder="Email"
+            placeholderTextColor="#BDBDBD"
+            onFocus={() => setInputFocusEmail(true)}
+            onBlur={() => setInputFocusEmail(false)}
           />
 
           <View style={styles.inputWrap}>
             <TextInput
-              style={styles.input}
-              cursorColor={"#212121"}
-              placeholder={"Password"}
-              placeholderTextColor={"#BDBDBD"}
+              style={[styles.input, inputFocusPassword && styles.inputFocus]}
+              cursorColor="#212121"
+              placeholder="Password"
+              placeholderTextColor="#BDBDBD"
               secureTextEntry={showPassword}
+              onFocus={() => setInputFocusPassword(true)}
+              onBlur={() => setInputFocusPassword(false)}
             />
             <TouchableOpacity
               style={styles.inputBtn}
@@ -56,7 +66,7 @@ export const Register = () => {
           <TouchableOpacity
             style={styles.btn}
             activeOpacity={0.8}
-            onPress={() => console.log("hello button")}
+            onPress={() => console.log(inputRef.current.isFocused())}
           >
             <Text style={styles.btnTitle}>Registration</Text>
           </TouchableOpacity>
