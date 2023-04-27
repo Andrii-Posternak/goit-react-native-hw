@@ -22,9 +22,8 @@ export const styles = StyleSheet.create({
   },
 
   titleForm: {
-    fontFamily: "Roboto",
+    fontFamily: "Roboto-Medium",
     fontStyle: "normal",
-    fontWeight: "medium",
     fontSize: 30,
     lineHeight: 35,
     textAlign: "center",
@@ -43,9 +42,8 @@ export const styles = StyleSheet.create({
     padding: 16,
     marginBottom: 16,
 
-    fontFamily: "Roboto",
+    fontFamily: "Roboto-Regular",
     fontStyle: "normal",
-    fontWeight: "regular",
     fontSize: 16,
     lineHeight: 19,
     color: "#212121",
@@ -67,9 +65,8 @@ export const styles = StyleSheet.create({
   },
 
   inputBtnTitle: {
-    fontFamily: "Roboto",
+    fontFamily: "Roboto-Regular",
     fontStyle: "normal",
-    fontWeight: "regular",
     fontSize: 16,
     lineHeight: 19,
     color: "#1B4371",
@@ -87,18 +84,16 @@ export const styles = StyleSheet.create({
   },
 
   btnTitle: {
-    fontFamily: "Roboto",
+    fontFamily: "Roboto-Regular",
     fontStyle: "normal",
-    fontWeight: "regular",
     fontSize: 16,
     lineHeight: 19,
     color: "#ffffff",
   },
 
   navigate: {
-    fontFamily: "Roboto",
+    fontFamily: "Roboto-Regular",
     fontStyle: "normal",
-    fontWeight: "regular",
     fontSize: 16,
     lineHeight: 19,
     textAlign: "center",
