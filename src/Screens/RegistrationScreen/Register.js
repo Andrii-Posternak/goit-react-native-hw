@@ -1,10 +1,14 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import {
   View,
   ImageBackground,
   Text,
   TextInput,
   TouchableOpacity,
+  TouchableWithoutFeedback,
+  KeyboardAvoidingView,
+  Keyboard,
+  Platform,
 } from "react-native";
 import { AvatarForm } from "../../components/AvatarForm/AvatarForm";
 import { styles } from "./RegisterStyle";
@@ -17,91 +21,144 @@ const initialState = {
 
 export const Register = () => {
   const [formData, setFormData] = useState(initialState);
+  const [showKeyboard, setShowKeyboard] = useState(false);
   const [showPassword, setShowPassword] = useState(true);
-  const [inputFocusLogin, setInputFocusLogin] = useState(false);
-  const [inputFocusEmail, setInputFocusEmail] = useState(false);
-  const [inputFocusPassword, setInputFocusPassword] = useState(false);
+  const [isInputLoginInFocus, setIsInputLoginInFocus] = useState(false);
+  const [isInputEmailInFocus, setIsInputEmailInFocus] = useState(false);
+  const [isInputPasswordInFocus, setIsInputPasswordInFocus] = useState(false);
 
-  const hundleChangeLogin = (value) =>
+  const handleChangeLogin = (value) =>
     setFormData((prevState) => ({ ...prevState, login: value }));
 
-  const hundleChangeEmail = (value) =>
+  const handleChangeEmail = (value) =>
     setFormData((prevState) => ({ ...prevState, email: value }));
 
-  const hundleChangePassword = (value) =>
+  const handleChangePassword = (value) =>
     setFormData((prevState) => ({ ...prevState, password: value }));
 
+  const handleFocusLogin = () => {
+    setIsInputLoginInFocus(true);
+    setShowKeyboard(true);
+  };
+
+  const handleFocusEmail = () => {
+    setIsInputEmailInFocus(true);
+    setShowKeyboard(true);
+  };
+
+  const handleFocusPassword = () => {
+    setIsInputPasswordInFocus(true);
+    setShowKeyboard(true);
+  };
+
+  const hideKeyboard = () => {
+    Keyboard.dismiss();
+    setShowKeyboard(false);
+  };
+
+  const handleSubmit = () => {
+    console.log(formData);
+    setFormData(initialState);
+    hideKeyboard();
+  };
+
+  useEffect(() => {
+    const showKeyboard = Keyboard.addListener("keyboardDidShow", () => {
+      setShowKeyboard(true);
+    });
+    const hideKeyboard = Keyboard.addListener("keyboardDidHide", () => {
+      setShowKeyboard(false);
+    });
+    return () => {
+      showKeyboard.remove();
+      hideKeyboard.remove();
+    };
+  }, []);
+
   return (
-    <View style={styles.container}>
-      <ImageBackground
-        style={styles.image}
-        source={require("../../images/background.png")}
-      >
-        <View style={styles.form}>
-          <AvatarForm />
-          <Text style={styles.titleForm}>Registration</Text>
+    <TouchableWithoutFeedback onPress={hideKeyboard}>
+      <View style={styles.container}>
+        <ImageBackground
+          style={styles.image}
+          source={require("../../images/background.png")}
+        >
+          <View
+            style={{ ...styles.form, paddingBottom: showKeyboard ? 16 : 80 }}
+          >
+            <AvatarForm />
+            <Text style={styles.titleForm}>Registration</Text>
 
-          <TextInput
-            style={[styles.input, inputFocusLogin && styles.inputFocus]}
-            cursorColor="#212121"
-            placeholder="Login"
-            placeholderTextColor="#BDBDBD"
-            value={formData.login}
-            onChangeText={hundleChangeLogin}
-            onFocus={() => setInputFocusLogin(true)}
-            onBlur={() => setInputFocusLogin(false)}
-          />
-
-          <TextInput
-            style={[styles.input, inputFocusEmail && styles.inputFocus]}
-            cursorColor="#212121"
-            placeholder="Email"
-            placeholderTextColor="#BDBDBD"
-            value={formData.email}
-            onChangeText={hundleChangeEmail}
-            onFocus={() => setInputFocusEmail(true)}
-            onBlur={() => setInputFocusEmail(false)}
-          />
-
-          <View style={styles.inputWrap}>
-            <TextInput
-              style={[styles.input, inputFocusPassword && styles.inputFocus]}
-              cursorColor="#212121"
-              placeholder="Password"
-              placeholderTextColor="#BDBDBD"
-              secureTextEntry={showPassword}
-              value={formData.password}
-              onChangeText={hundleChangePassword}
-              onFocus={() => setInputFocusPassword(true)}
-              onBlur={() => setInputFocusPassword(false)}
-            />
-            <TouchableOpacity
-              style={styles.inputBtn}
-              activeOpacity={0.8}
-              onPress={() => setShowPassword(!showPassword)}
+            <KeyboardAvoidingView
+              behavior={Platform.OS == "ios" ? "padding" : "height"}
             >
-              <Text style={styles.inputBtnTitle}>
-                {showPassword ? "Show" : "Hide"}
+              <TextInput
+                style={[styles.input, isInputLoginInFocus && styles.inputFocus]}
+                maxLength={20}
+                cursorColor="#212121"
+                placeholder="Login"
+                placeholderTextColor="#BDBDBD"
+                value={formData.login}
+                onChangeText={handleChangeLogin}
+                onFocus={handleFocusLogin}
+                onBlur={() => setIsInputLoginInFocus(false)}
+              />
+
+              <TextInput
+                style={[styles.input, isInputEmailInFocus && styles.inputFocus]}
+                maxLength={20}
+                cursorColor="#212121"
+                placeholder="Email"
+                placeholderTextColor="#BDBDBD"
+                value={formData.email}
+                onChangeText={handleChangeEmail}
+                onFocus={handleFocusEmail}
+                onBlur={() => setIsInputEmailInFocus(false)}
+              />
+
+              <View style={styles.inputWrap}>
+                <TextInput
+                  style={[
+                    styles.input,
+                    isInputPasswordInFocus && styles.inputFocus,
+                  ]}
+                  maxLength={20}
+                  cursorColor="#212121"
+                  placeholder="Password"
+                  placeholderTextColor="#BDBDBD"
+                  secureTextEntry={showPassword}
+                  value={formData.password}
+                  onChangeText={handleChangePassword}
+                  onFocus={handleFocusPassword}
+                  onBlur={() => setIsInputPasswordInFocus(false)}
+                />
+                <TouchableOpacity
+                  style={styles.inputBtn}
+                  activeOpacity={0.8}
+                  onPress={() => setShowPassword(!showPassword)}
+                >
+                  <Text style={styles.inputBtnTitle}>
+                    {showPassword ? "Show" : "Hide"}
+                  </Text>
+                </TouchableOpacity>
+              </View>
+            </KeyboardAvoidingView>
+
+            <TouchableOpacity
+              style={styles.btn}
+              activeOpacity={0.8}
+              onPress={handleSubmit}
+            >
+              <Text style={styles.btnTitle}>Registration</Text>
+            </TouchableOpacity>
+
+            <TouchableOpacity activeOpacity={0.6}>
+              <Text style={styles.navigate}>
+                Already have an account? Login
               </Text>
             </TouchableOpacity>
           </View>
-
-          <TouchableOpacity
-            style={styles.btn}
-            activeOpacity={0.8}
-            onPress={() => {
-              console.log(formData);
-              setFormData(initialState);
-            }}
-          >
-            <Text style={styles.btnTitle}>Registration</Text>
-          </TouchableOpacity>
-
-          <TouchableOpacity activeOpacity={0.8}>
-            <Text style={styles.navigate}>Already have an account? Login</Text>
-          </TouchableOpacity>
-        </View>
-      </ImageBackground>
-    </View>
+        </ImageBackground>
+      </View>
+    </TouchableWithoutFeedback>
   );
 };

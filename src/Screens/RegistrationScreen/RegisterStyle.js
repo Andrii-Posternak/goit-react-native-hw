@@ -4,28 +4,21 @@ export const styles = StyleSheet.create({
   container: {
     flex: 1,
     backgroundColor: "#ffffff",
-    // alignItems: "center",
-    // justifyContent: "center",
   },
 
   image: {
     flex: 1,
     alignItems: "center",
-    // justifyContent: "center",
     justifyContent: "flex-end",
   },
 
   form: {
     width: "100%",
-    height: 550,
     backgroundColor: "#ffffff",
     borderTopLeftRadius: 25,
     borderTopRightRadius: 25,
     paddingHorizontal: 16,
-    // paddingVertical: 32,
     paddingTop: 92,
-    paddingBottom: 32,
-    color: "red",
   },
 
   titleForm: {
