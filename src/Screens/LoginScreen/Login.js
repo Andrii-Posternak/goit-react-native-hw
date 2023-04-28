@@ -1,0 +1,140 @@
+import { useEffect, useState } from "react";
+import {
+  View,
+  ImageBackground,
+  Text,
+  TextInput,
+  TouchableOpacity,
+  TouchableWithoutFeedback,
+  KeyboardAvoidingView,
+  Keyboard,
+  Platform,
+} from "react-native";
+import { styles } from "./LoginStyle";
+
+const initialState = {
+  email: "",
+  password: "",
+};
+
+export const Login = () => {
+  const [formData, setFormData] = useState(initialState);
+  const [showKeyboard, setShowKeyboard] = useState(false);
+  const [showPassword, setShowPassword] = useState(true);
+  const [isInputEmailInFocus, setIsInputEmailInFocus] = useState(false);
+  const [isInputPasswordInFocus, setIsInputPasswordInFocus] = useState(false);
+
+  const handleChangeEmail = (value) =>
+    setFormData((prevState) => ({ ...prevState, email: value }));
+
+  const handleChangePassword = (value) =>
+    setFormData((prevState) => ({ ...prevState, password: value }));
+
+  const handleFocusEmail = () => {
+    setIsInputEmailInFocus(true);
+    setShowKeyboard(true);
+  };
+
+  const handleFocusPassword = () => {
+    setIsInputPasswordInFocus(true);
+    setShowKeyboard(true);
+  };
+
+  const hideKeyboard = () => {
+    Keyboard.dismiss();
+    setShowKeyboard(false);
+  };
+
+  const handleSubmit = () => {
+    console.log(formData);
+    setFormData(initialState);
+    hideKeyboard();
+  };
+
+  useEffect(() => {
+    const showKeyboard = Keyboard.addListener("keyboardDidShow", () => {
+      setShowKeyboard(true);
+    });
+    const hideKeyboard = Keyboard.addListener("keyboardDidHide", () => {
+      setShowKeyboard(false);
+    });
+    return () => {
+      showKeyboard.remove();
+      hideKeyboard.remove();
+    };
+  }, []);
+
+  return (
+    <TouchableWithoutFeedback onPress={hideKeyboard}>
+      <View style={styles.container}>
+        <ImageBackground
+          style={styles.image}
+          source={require("../../images/background.png")}
+        >
+          <View
+            style={{ ...styles.form, paddingBottom: showKeyboard ? 16 : 144 }}
+          >
+            <Text style={styles.titleForm}>Login</Text>
+
+            <KeyboardAvoidingView
+              behavior={Platform.OS == "ios" ? "padding" : "height"}
+            >
+              <TextInput
+                style={[styles.input, isInputEmailInFocus && styles.inputFocus]}
+                maxLength={20}
+                cursorColor="#212121"
+                placeholder="Email"
+                placeholderTextColor="#BDBDBD"
+                value={formData.email}
+                onChangeText={handleChangeEmail}
+                onFocus={handleFocusEmail}
+                onBlur={() => setIsInputEmailInFocus(false)}
+              />
+
+              <View style={styles.inputWrap}>
+                <TextInput
+                  style={[
+                    styles.input,
+                    isInputPasswordInFocus && styles.inputFocus,
+                  ]}
+                  maxLength={20}
+                  cursorColor="#212121"
+                  placeholder="Password"
+                  placeholderTextColor="#BDBDBD"
+                  secureTextEntry={showPassword}
+                  value={formData.password}
+                  onChangeText={handleChangePassword}
+                  onFocus={handleFocusPassword}
+                  onBlur={() => setIsInputPasswordInFocus(false)}
+                />
+                <TouchableOpacity
+                  style={styles.inputBtn}
+                  activeOpacity={0.8}
+                  onPress={() => setShowPassword(!showPassword)}
+                >
+                  <Text style={styles.inputBtnTitle}>
+                    {showPassword ? "Show" : "Hide"}
+                  </Text>
+                </TouchableOpacity>
+              </View>
+            </KeyboardAvoidingView>
+
+            <TouchableOpacity
+              style={styles.btn}
+              activeOpacity={0.8}
+              onPress={handleSubmit}
+            >
+              <Text style={styles.btnTitle}>Login</Text>
+            </TouchableOpacity>
+
+            <TouchableOpacity activeOpacity={0.6}>
+              <Text style={styles.navigate}>
+                Don't have an account? Register
+              </Text>
+            </TouchableOpacity>
+          </View>
+        </ImageBackground>
+      </View>
+    </TouchableWithoutFeedback>
+  );
+};

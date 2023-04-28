@@ -4,6 +4,7 @@ import { ActivityIndicator, StyleSheet, View } from "react-native";
 import { useFonts } from "expo-font";
 import * as SplashScreen from "expo-splash-screen";
 import { Register } from "./src/Screens/RegistrationScreen/Register";
+import { Login } from "./src/Screens/LoginScreen/Login";
 
 SplashScreen.preventAutoHideAsync();
 
@@ -29,7 +30,8 @@ export default function App() {
   return (
     <View style={styles.container} onLayout={onLayoutRootView}>
       <StatusBar style="auto" />
-      <Register />
+      {/* <Register /> */}
+      <Login />
     </View>
   );
 }
