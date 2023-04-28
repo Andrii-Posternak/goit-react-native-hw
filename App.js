@@ -1,6 +1,11 @@
 import { useCallback } from "react";
 import { StatusBar } from "expo-status-bar";
-import { ActivityIndicator, StyleSheet, View } from "react-native";
+import {
+  ActivityIndicator,
+  ImageBackground,
+  StyleSheet,
+  View,
+} from "react-native";
 import { useFonts } from "expo-font";
 import * as SplashScreen from "expo-splash-screen";
 import { Register } from "./src/Screens/RegistrationScreen/Register";
@@ -29,9 +34,14 @@ export default function App() {
 
   return (
     <View style={styles.container} onLayout={onLayoutRootView}>
-      <StatusBar style="auto" />
-      {/* <Register /> */}
-      <Login />
+      <ImageBackground
+        style={styles.image}
+        source={require("./src/images/background.png")}
+      >
+        <StatusBar style="auto" />
+        <Register />
+        {/* <Login /> */}
+      </ImageBackground>
     </View>
   );
 }
@@ -40,6 +50,11 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
     backgroundColor: "#ffffff",
+  },
+
+  image: {
+    flex: 1,
+    justifyContent: "flex-end",
   },
 
   loader: {
