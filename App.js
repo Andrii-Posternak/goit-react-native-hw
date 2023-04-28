@@ -20,11 +20,14 @@ export default function App() {
     }
   }, [fontsLoaded]);
 
+  if (!fontsLoaded) {
+    return (
+      <ActivityIndicator style={styles.loader} size="large" color="#FF6C00" />
+    );
+  }
+
   return (
     <View style={styles.container} onLayout={onLayoutRootView}>
-      {!fontsLoaded && (
-        <ActivityIndicator style={styles.loader} size="large" color="#FF6C00" />
-      )}
       <StatusBar style="auto" />
       <Register />
     </View>
@@ -38,10 +41,9 @@ const styles = StyleSheet.create({
   },
 
   loader: {
-    position: "absolute",
-    top: 20,
-    left: "50%",
-    transform: [{ translateX: -20 }],
-    zIndex: 10,
+    width: "100%",
+    height: "100%",
+    justifyContent: "center",
+    alignItems: "center",
   },
 });
