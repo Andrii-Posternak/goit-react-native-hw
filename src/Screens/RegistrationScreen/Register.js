@@ -20,8 +20,8 @@ const initialState = {
 
 export const Register = () => {
   const [formData, setFormData] = useState(initialState);
-  const [showKeyboard, setShowKeyboard] = useState(false);
   const [showPassword, setShowPassword] = useState(true);
+  const [padding, setPadding] = useState(80);
   const [isInputLoginInFocus, setIsInputLoginInFocus] = useState(false);
   const [isInputEmailInFocus, setIsInputEmailInFocus] = useState(false);
   const [isInputPasswordInFocus, setIsInputPasswordInFocus] = useState(false);
@@ -37,22 +37,18 @@ export const Register = () => {
 
   const handleFocusLogin = () => {
     setIsInputLoginInFocus(true);
-    setShowKeyboard(true);
   };
 
   const handleFocusEmail = () => {
     setIsInputEmailInFocus(true);
-    setShowKeyboard(true);
   };
 
   const handleFocusPassword = () => {
     setIsInputPasswordInFocus(true);
-    setShowKeyboard(true);
   };
 
   const hideKeyboard = () => {
     Keyboard.dismiss();
-    setShowKeyboard(false);
   };
 
   const handleSubmit = () => {
@@ -62,12 +58,14 @@ export const Register = () => {
   };
 
   useEffect(() => {
-    const showKeyboard = Keyboard.addListener("keyboardDidShow", () => {
-      setShowKeyboard(true);
+    const showKeyboard = Keyboard.addListener("keyboardDidShow", (e) => {
+      const keyboardHeight = e.endCoordinates.height;
+      setPadding(keyboardHeight + 16);
     });
     const hideKeyboard = Keyboard.addListener("keyboardDidHide", () => {
-      setShowKeyboard(false);
+      setPadding(80);
     });
+
     return () => {
       showKeyboard.remove();
       hideKeyboard.remove();
@@ -76,7 +74,7 @@ export const Register = () => {
 
   return (
     <TouchableWithoutFeedback onPress={hideKeyboard}>
-      <View style={{ ...styles.form, paddingBottom: showKeyboard ? 16 : 80 }}>
+      <View style={{ ...styles.form, paddingBottom: padding }}>
         <AvatarForm />
         <Text style={styles.titleForm}>Registration</Text>
 

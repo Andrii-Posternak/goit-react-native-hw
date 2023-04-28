@@ -18,8 +18,8 @@ const initialState = {
 
 export const Login = () => {
   const [formData, setFormData] = useState(initialState);
-  const [showKeyboard, setShowKeyboard] = useState(false);
   const [showPassword, setShowPassword] = useState(true);
+  const [padding, setPadding] = useState(144);
   const [isInputEmailInFocus, setIsInputEmailInFocus] = useState(false);
   const [isInputPasswordInFocus, setIsInputPasswordInFocus] = useState(false);
 
@@ -31,17 +31,14 @@ export const Login = () => {
 
   const handleFocusEmail = () => {
     setIsInputEmailInFocus(true);
-    setShowKeyboard(true);
   };
 
   const handleFocusPassword = () => {
     setIsInputPasswordInFocus(true);
-    setShowKeyboard(true);
   };
 
   const hideKeyboard = () => {
     Keyboard.dismiss();
-    setShowKeyboard(false);
   };
 
   const handleSubmit = () => {
@@ -51,12 +48,14 @@ export const Login = () => {
   };
 
   useEffect(() => {
-    const showKeyboard = Keyboard.addListener("keyboardDidShow", () => {
-      setShowKeyboard(true);
+    const showKeyboard = Keyboard.addListener("keyboardDidShow", (e) => {
+      const keyboardHeight = e.endCoordinates.height;
+      setPadding(keyboardHeight + 16);
     });
     const hideKeyboard = Keyboard.addListener("keyboardDidHide", () => {
-      setShowKeyboard(false);
+      setPadding(144);
     });
+
     return () => {
       showKeyboard.remove();
       hideKeyboard.remove();
@@ -65,7 +64,7 @@ export const Login = () => {
 
   return (
     <TouchableWithoutFeedback onPress={hideKeyboard}>
-      <View style={{ ...styles.form, paddingBottom: showKeyboard ? 16 : 144 }}>
+      <View style={{ ...styles.form, paddingBottom: padding }}>
         <Text style={styles.titleForm}>Login</Text>
 
         <KeyboardAvoidingView
