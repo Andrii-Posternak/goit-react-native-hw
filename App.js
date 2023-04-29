@@ -3,6 +3,7 @@ import { StatusBar } from "expo-status-bar";
 import {
   ActivityIndicator,
   ImageBackground,
+  ScrollView,
   StyleSheet,
   View,
 } from "react-native";
@@ -33,7 +34,11 @@ export default function App() {
   }
 
   return (
-    <View style={styles.container} onLayout={onLayoutRootView}>
+    <View
+      // contentContainerStyle={{ flex: 1 }}
+      style={styles.container}
+      onLayout={onLayoutRootView}
+    >
       <ImageBackground
         style={styles.image}
         source={require("./src/images/background.png")}
