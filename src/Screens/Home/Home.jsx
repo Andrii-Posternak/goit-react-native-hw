@@ -1,27 +1,90 @@
 import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
+import { TouchableOpacity, View } from "react-native";
+import {
+  AntDesign,
+  Ionicons,
+  Feather,
+  MaterialIcons,
+} from "@expo/vector-icons";
 import { PostsScreen } from "../PostsScreen/PostsScreen";
 import { CreatePostsScreen } from "../CreatePostsScreen/CreatePostsScreen";
 import { ProfileScreen } from "../ProfileScreen/ProfileScreen";
+import { styles } from "./HomeStyle";
 
 const HomeTab = createBottomTabNavigator();
 
-export const Home = () => {
+export const Home = ({ navigation }) => {
   return (
-    <HomeTab.Navigator initialRouteName="Posts">
+    <HomeTab.Navigator
+      initialRouteName="Posts"
+      screenOptions={{
+        headerStyle: styles.header,
+        headerTitleAlign: "center",
+        headerTitleStyle: styles.headerTitle,
+        tabBarShowLabel: false,
+        tabBarActiveTintColor: "#FF6C00",
+        tabBarStyle: styles.tabBar,
+      }}
+    >
       <HomeTab.Screen
         name="Posts"
         component={PostsScreen}
-        // options={{ headerShown: false }}
+        options={{
+          headerRight: () => (
+            <TouchableOpacity
+              style={{ right: 16 }}
+              activeOpacity={0.5}
+              onPress={() => console.log("log out")}
+            >
+              <MaterialIcons name="logout" size={24} color="#BDBDBD" />
+            </TouchableOpacity>
+          ),
+          tabBarIcon: ({ focused, color }) => (
+            <AntDesign
+              name="appstore-o"
+              size={24}
+              color={focused ? color : "#212121cc"}
+            />
+          ),
+        }}
       />
+
       <HomeTab.Screen
-        name="CreatePosts"
+        name="CreatePost"
         component={CreatePostsScreen}
-        // options={{ headerShown: false }}
+        options={{
+          title: "Create post",
+          headerLeft: () => (
+            <TouchableOpacity
+              style={{ left: 16 }}
+              activeOpacity={0.5}
+              onPress={() => navigation.goBack()}
+            >
+              <Ionicons name="arrow-back" size={24} color="#212121cc" />
+            </TouchableOpacity>
+          ),
+          tabBarIcon: () => (
+            <View style={styles.addBtn}>
+              <AntDesign name="plus" size={13} color="#ffffff" />
+            </View>
+          ),
+          tabBarStyle: { display: "none" },
+        }}
       />
+
       <HomeTab.Screen
         name="Profile"
         component={ProfileScreen}
-        options={{ headerShown: false }}
+        options={{
+          headerShown: false,
+          tabBarIcon: ({ focused, color }) => (
+            <Feather
+              name="user"
+              size={24}
+              color={focused ? color : "#212121cc"}
+            />
+          ),
+        }}
       />
     </HomeTab.Navigator>
   );
