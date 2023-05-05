@@ -21,6 +21,7 @@ export const styles = StyleSheet.create({
     backgroundColor: "#ffffff",
     borderTopWidth: 1,
     borderTopColor: "#b3b3b3",
+
     paddingHorizontal: 82,
     paddingTop: 9,
     paddingBottom: 34,
@@ -31,6 +32,7 @@ export const styles = StyleSheet.create({
     height: 40,
     borderRadius: 20,
     backgroundColor: "#FF6C00",
+
     alignItems: "center",
     justifyContent: "center",
   },
