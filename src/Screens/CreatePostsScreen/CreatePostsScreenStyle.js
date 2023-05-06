@@ -26,6 +26,11 @@ export const styles = StyleSheet.create({
     marginBottom: 8,
   },
 
+  photo: {
+    width: "100%",
+    height: "100%",
+  },
+
   cameraBtn: {
     position: "absolute",
     top: "50%",
@@ -111,50 +116,6 @@ export const styles = StyleSheet.create({
     justifyContent: "flex-end",
 
     paddingBottom: 34,
-  },
-
-  preview: {
-    position: "absolute",
-    top: 30,
-    left: 20,
-
-    width: width - 2 * 20,
-    height: height - (88 + 20 + 60 + 54),
-    borderWidth: 1,
-    borderColor: "#ffffff",
-  },
-
-  photo: {
-    width: "100%",
-    height: "100%",
-  },
-
-  confirmBtn: {
-    position: "absolute",
-    bottom: 20,
-    left: width / 2 - 80,
-
-    width: 40,
-    height: 40,
-    borderRadius: 20,
-    backgroundColor: "green",
-
-    alignItems: "center",
-    justifyContent: "center",
-  },
-
-  rejectBtn: {
-    position: "absolute",
-    bottom: 20,
-    right: width / 2 - 80,
-
-    width: 40,
-    height: 40,
-    borderRadius: 20,
-    backgroundColor: "red",
-
-    alignItems: "center",
-    justifyContent: "center",
   },
 
   btnContainer: {

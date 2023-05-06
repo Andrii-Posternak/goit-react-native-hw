@@ -1,5 +1,6 @@
 import { useEffect, useState } from "react";
 import {
+  Dimensions,
   Image,
   Keyboard,
   KeyboardAvoidingView,
@@ -15,11 +16,11 @@ import {
   SimpleLineIcons,
   Feather,
   Ionicons,
-  Entypo,
 } from "@expo/vector-icons";
 import { Camera, CameraType } from "expo-camera";
-import * as MediaLibrary from "expo-media-library";
 import * as Location from "expo-location";
+import * as MediaLibrary from "expo-media-library";
+import * as ImagePicker from "expo-image-picker";
 import { styles } from "./CreatePostsScreenStyle";
 
 const initialState = {
@@ -29,45 +30,34 @@ const initialState = {
 };
 
 export const CreatePostsScreen = ({ navigation }) => {
+  //camera
   const [isCameraOpen, setIsCameraOpen] = useState(false);
   const [cameraRef, setCameraRef] = useState(null);
+  const [cameraType, setCameraType] = useState(CameraType.back);
 
+  //form
   const [photo, setPhoto] = useState(null);
-
   const [description, setDescription] = useState(null);
   const [location, setLocation] = useState(initialState);
+
+  //input
   const [isInputDescriptionInFocus, setIsInputDescriptionInFocus] =
     useState(false);
   const [isInputLocationInFocus, setIsInputLocationInFocus] = useState(false);
 
+  //all permissions
   const [hasPermission, setHasPermission] = useState(null);
-  const [type, setType] = useState(CameraType.back);
-
-  // useEffect(
-  //   () => async () => {
-  //     const cameraPermission = await Camera.requestCameraPermissionsAsync();
-  //     const mediaPermission = await MediaLibrary.requestPermissionsAsync();
-  //     const locationPermission =
-  //       await Location.requestForegroundPermissionsAsync();
-  //     console.log("media==>", mediaPermission.status);
-  //     // setHasPermission(
-  //     //   cameraPermission.status === "granted" &&
-  //     //     mediaPermission.status === "granted" &&
-  //     //     locationPermission.status === "granted"
-  //     // );
-  //   },
-  //   [isCameraOpen]
-  // );
 
   useEffect(() => {
     if (isCameraOpen) {
       (async () => {
         try {
+          //get  permissions
           const cameraPermission = await Camera.requestCameraPermissionsAsync();
           const mediaPermission = await MediaLibrary.requestPermissionsAsync();
           const locationPermission =
             await Location.requestForegroundPermissionsAsync();
-          console.log("inside useeffect");
+
           setHasPermission(
             cameraPermission.status === "granted" &&
               mediaPermission.status === "granted" &&
@@ -82,35 +72,66 @@ export const CreatePostsScreen = ({ navigation }) => {
 
   const toggleCamera = () => {
     if (hasPermission === false) {
-      alert("No permission to access camera, media or location");
+      alert(
+        "No permission to access camera, media or location. You must grant permission."
+      );
     } else {
       setIsCameraOpen(!isCameraOpen);
     }
   };
 
   const toggleCameraType = () => {
-    if (type === "back") {
-      return setType(CameraType.front);
+    if (cameraType === "back") {
+      return setCameraType(CameraType.front);
     }
-    return setType(CameraType.back);
+    return setCameraType(CameraType.back);
   };
 
   const takePhoto = async () => {
-    const { uri } = await cameraRef.takePictureAsync();
-    const { coords } = await Location.getCurrentPositionAsync({});
+    try {
+      const { uri } = await cameraRef.takePictureAsync();
+      const { coords } = await Location.getCurrentPositionAsync({});
 
-    setPhoto(uri);
-    setLocation((prevState) => ({
-      ...prevState,
-      latitude: coords.latitude,
-      longitude: coords.longitude,
-    }));
-    toggleCamera();
+      setPhoto(uri);
+      setLocation((prevState) => ({
+        ...prevState,
+        latitude: coords.latitude,
+        longitude: coords.longitude,
+      }));
+
+      toggleCamera();
+    } catch (error) {
+      alert(error.message);
+    }
   };
 
   const uploadPhoto = async () => {
-    const result = await MediaLibrary.getAlbumsAsync();
-    return console.log("result ==>", result);
+    try {
+      const result = await ImagePicker.launchImageLibraryAsync({
+        mediaTypes: ImagePicker.MediaTypeOptions.All,
+        allowsEditing: true,
+        aspect: [4, 3],
+        quality: 1,
+      });
+
+      if (!location.name) {
+        return alert("Enter location first");
+      }
+
+      if (!result.canceled) {
+        await Location.requestForegroundPermissionsAsync();
+        const [coords] = await Location.geocodeAsync(location.name);
+
+        setLocation((prevState) => ({
+          ...prevState,
+          latitude: coords.latitude,
+          longitude: coords.longitude,
+        }));
+        setPhoto(result.assets[0].uri);
+      }
+    } catch (error) {
+      alert(error.message);
+    }
   };
 
   const hasData = () => {
@@ -138,7 +159,7 @@ export const CreatePostsScreen = ({ navigation }) => {
   return (
     <TouchableWithoutFeedback onPress={() => Keyboard.dismiss()}>
       {isCameraOpen ? (
-        <Camera style={styles.camera} type={type} ref={setCameraRef}>
+        <Camera style={styles.camera} type={cameraType} ref={setCameraRef}>
           <View style={styles.btnContainer}>
             <TouchableOpacity
               style={styles.backBtn}
@@ -191,7 +212,7 @@ export const CreatePostsScreen = ({ navigation }) => {
           <TouchableOpacity
             style={styles.uploadBtn}
             activeOpacity={0.5}
-            onPress={() => console.log("upload photo from gallery")}
+            onPress={uploadPhoto}
           >
             <Text style={styles.text}>
               {photo ? "Edit photo" : "Upload photo"}
