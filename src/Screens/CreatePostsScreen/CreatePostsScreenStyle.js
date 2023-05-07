@@ -118,6 +118,7 @@ export const styles = StyleSheet.create({
     justifyContent: "flex-end",
 
     paddingBottom: 34,
+    marginTop: "40%",
   },
 
   btnContainer: {
