@@ -60,6 +60,8 @@ export const styles = StyleSheet.create({
 
   form: {
     marginTop: 48,
+    marginBottom: 32,
+    flexGrow: 1,
   },
 
   input: {
@@ -90,7 +92,7 @@ export const styles = StyleSheet.create({
     justifyContent: "center",
     alignItems: "center",
 
-    marginBottom: 32,
+    // marginBottom: 32,
   },
 
   deleteBtn: {
@@ -102,7 +104,7 @@ export const styles = StyleSheet.create({
     justifyContent: "center",
     alignItems: "center",
 
-    marginTop: "auto",
+    // marginTop: "auto",
     marginLeft: "auto",
     marginRight: "auto",
   },
@@ -110,7 +112,7 @@ export const styles = StyleSheet.create({
   //camera style
   camera: {
     width: "100%",
-    height: "70%",
+    height: "60%",
 
     alignItems: "center",
     justifyContent: "flex-end",

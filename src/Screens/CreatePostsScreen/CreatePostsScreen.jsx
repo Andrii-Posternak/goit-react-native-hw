@@ -4,6 +4,7 @@ import {
   Image,
   Keyboard,
   KeyboardAvoidingView,
+  Platform,
   ScrollView,
   Text,
   TextInput,
@@ -47,6 +48,10 @@ export const CreatePostsScreen = ({ navigation }) => {
 
   //all permissions
   const [hasPermission, setHasPermission] = useState(null);
+
+  useEffect(() => {
+    navigation.navigate("Home", { isCameraOpen });
+  });
 
   useEffect(() => {
     if (isCameraOpen) {

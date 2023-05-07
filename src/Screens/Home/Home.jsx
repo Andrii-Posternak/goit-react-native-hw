@@ -12,8 +12,13 @@ import { ProfileScreen } from "../ProfileScreen/ProfileScreen";
 import { styles } from "./HomeStyle";
 
 const HomeTab = createBottomTabNavigator();
+let isCameraOpen;
 
-export const Home = ({ navigation }) => {
+export const Home = ({ navigation, route }) => {
+  if (route.params) {
+    isCameraOpen = route.params.isCameraOpen;
+  }
+
   return (
     <HomeTab.Navigator
       initialRouteName="Posts"
@@ -53,6 +58,7 @@ export const Home = ({ navigation }) => {
         name="CreatePost"
         component={CreatePostsScreen}
         options={{
+          headerShown: !isCameraOpen,
           title: "Create post",
           headerLeft: () => (
             <TouchableOpacity

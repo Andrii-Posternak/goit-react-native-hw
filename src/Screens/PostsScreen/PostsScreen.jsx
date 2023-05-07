@@ -22,15 +22,6 @@ export const PostsScreen = ({ navigation, route }) => {
 
   return (
     <View style={styles.container}>
-      <Button
-        title="Go to the CommentsScreen"
-        onPress={() => navigation.navigate("Comments")}
-      />
-      <Button
-        title="Go to the MapScreen"
-        onPress={() => navigation.navigate("Map")}
-      />
-
       <View style={styles.userInfoWrap}>
         <View style={styles.avatarWrap}>
           <Image
@@ -56,7 +47,9 @@ export const PostsScreen = ({ navigation, route }) => {
             <View style={styles.postInfoWrap}>
               <View style={styles.infoWrap}>
                 <TouchableOpacity
-                  onPress={() => navigation.navigate("Comments")}
+                  onPress={() =>
+                    navigation.navigate("Comments", { photo: item.photo })
+                  }
                 >
                   <EvilIcons name="comment" size={24} color="#BDBDBD" />
                 </TouchableOpacity>

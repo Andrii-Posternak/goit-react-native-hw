@@ -8,6 +8,7 @@ import { Login } from "./src/Screens/LoginScreen/Login";
 import { Home } from "./src/Screens/Home/Home";
 import { CommentsScreen } from "./src/Screens/CommentsScreen/CommentsScreen";
 import { MapScreen } from "./src/Screens/MapScreen/MapScreen";
+import { styles } from "./src/Screens/Home/HomeStyle";
 
 const AuthStack = createStackNavigator();
 const MainStack = createStackNavigator();
@@ -45,8 +46,24 @@ export default function App() {
             component={Home}
             options={{ headerShown: false }}
           />
-          <MainStack.Screen name="Comments" component={CommentsScreen} />
-          <MainStack.Screen name="Map" component={MapScreen} />
+          <MainStack.Screen
+            options={{
+              headerStyle: styles.header,
+              headerTitleAlign: "center",
+              headerTitleStyle: styles.headerTitle,
+            }}
+            name="Comments"
+            component={CommentsScreen}
+          />
+          <MainStack.Screen
+            options={{
+              headerStyle: styles.header,
+              headerTitleAlign: "center",
+              headerTitleStyle: styles.headerTitle,
+            }}
+            name="Map"
+            component={MapScreen}
+          />
         </MainStack.Navigator>
       ) : (
         <AuthStack.Navigator initialRouteName="Login">
