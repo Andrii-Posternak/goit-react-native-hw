@@ -6,13 +6,19 @@ export const styles = StyleSheet.create({
     justifyContent: "flex-end",
   },
 
+  scrollBox: {
+    flexGrow: 0,
+  },
+
   form: {
     width: "100%",
     backgroundColor: "#ffffff",
     borderTopLeftRadius: 25,
     borderTopRightRadius: 25,
+
     paddingHorizontal: 16,
     paddingTop: 92,
+    marginTop: 60,
   },
 
   titleForm: {

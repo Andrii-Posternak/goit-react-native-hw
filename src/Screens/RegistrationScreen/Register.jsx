@@ -8,6 +8,7 @@ import {
   KeyboardAvoidingView,
   Keyboard,
   Platform,
+  ScrollView,
 } from "react-native";
 import { useNavigation } from "@react-navigation/native";
 
@@ -84,84 +85,92 @@ export const Register = () => {
         style={styles.image}
         source={require("../../images/background.png")}
       >
-        <TouchableWithoutFeedback onPress={hideKeyboard}>
-          <View style={{ ...styles.form, paddingBottom: padding }}>
-            <AvatarForm />
-            <Text style={styles.titleForm}>Registration</Text>
+        <ScrollView style={styles.scrollBox}>
+          <TouchableWithoutFeedback onPress={hideKeyboard}>
+            <View style={{ ...styles.form, paddingBottom: padding }}>
+              <AvatarForm />
+              <Text style={styles.titleForm}>Registration</Text>
 
-            <KeyboardAvoidingView
-              behavior={Platform.OS == "ios" ? "padding" : "height"}
-            >
-              <TextInput
-                style={[styles.input, isInputLoginInFocus && styles.inputFocus]}
-                maxLength={20}
-                cursorColor="#212121"
-                placeholder="Login"
-                placeholderTextColor="#BDBDBD"
-                value={formData.login}
-                onChangeText={handleChangeLogin}
-                onFocus={handleFocusLogin}
-                onBlur={() => setIsInputLoginInFocus(false)}
-              />
-
-              <TextInput
-                style={[styles.input, isInputEmailInFocus && styles.inputFocus]}
-                maxLength={20}
-                cursorColor="#212121"
-                placeholder="Email"
-                placeholderTextColor="#BDBDBD"
-                value={formData.email}
-                onChangeText={handleChangeEmail}
-                onFocus={handleFocusEmail}
-                onBlur={() => setIsInputEmailInFocus(false)}
-              />
-
-              <View style={styles.inputWrap}>
+              <KeyboardAvoidingView
+                behavior={Platform.OS == "ios" ? "padding" : "height"}
+              >
                 <TextInput
                   style={[
                     styles.input,
-                    isInputPasswordInFocus && styles.inputFocus,
+                    isInputLoginInFocus && styles.inputFocus,
                   ]}
                   maxLength={20}
                   cursorColor="#212121"
-                  placeholder="Password"
+                  placeholder="Login"
                   placeholderTextColor="#BDBDBD"
-                  secureTextEntry={showPassword}
-                  value={formData.password}
-                  onChangeText={handleChangePassword}
-                  onFocus={handleFocusPassword}
-                  onBlur={() => setIsInputPasswordInFocus(false)}
+                  value={formData.login}
+                  onChangeText={handleChangeLogin}
+                  onFocus={handleFocusLogin}
+                  onBlur={() => setIsInputLoginInFocus(false)}
                 />
-                <TouchableOpacity
-                  style={styles.inputBtn}
-                  activeOpacity={0.8}
-                  onPress={() => setShowPassword(!showPassword)}
-                >
-                  <Text style={styles.inputBtnTitle}>
-                    {showPassword ? "Show" : "Hide"}
-                  </Text>
-                </TouchableOpacity>
-              </View>
-            </KeyboardAvoidingView>
 
-            <TouchableOpacity
-              style={styles.btn}
-              activeOpacity={0.8}
-              onPress={handleSubmit}
-            >
-              <Text style={styles.btnTitle}>Registration</Text>
-            </TouchableOpacity>
+                <TextInput
+                  style={[
+                    styles.input,
+                    isInputEmailInFocus && styles.inputFocus,
+                  ]}
+                  maxLength={20}
+                  cursorColor="#212121"
+                  placeholder="Email"
+                  placeholderTextColor="#BDBDBD"
+                  value={formData.email}
+                  onChangeText={handleChangeEmail}
+                  onFocus={handleFocusEmail}
+                  onBlur={() => setIsInputEmailInFocus(false)}
+                />
 
-            <TouchableOpacity
-              activeOpacity={0.6}
-              onPress={() => navigation.navigate("Login")}
-            >
-              <Text style={styles.navigate}>
-                Already have an account? Login
-              </Text>
-            </TouchableOpacity>
-          </View>
-        </TouchableWithoutFeedback>
+                <View style={styles.inputWrap}>
+                  <TextInput
+                    style={[
+                      styles.input,
+                      isInputPasswordInFocus && styles.inputFocus,
+                    ]}
+                    maxLength={20}
+                    cursorColor="#212121"
+                    placeholder="Password"
+                    placeholderTextColor="#BDBDBD"
+                    secureTextEntry={showPassword}
+                    value={formData.password}
+                    onChangeText={handleChangePassword}
+                    onFocus={handleFocusPassword}
+                    onBlur={() => setIsInputPasswordInFocus(false)}
+                  />
+                  <TouchableOpacity
+                    style={styles.inputBtn}
+                    activeOpacity={0.8}
+                    onPress={() => setShowPassword(!showPassword)}
+                  >
+                    <Text style={styles.inputBtnTitle}>
+                      {showPassword ? "Show" : "Hide"}
+                    </Text>
+                  </TouchableOpacity>
+                </View>
+              </KeyboardAvoidingView>
+
+              <TouchableOpacity
+                style={styles.btn}
+                activeOpacity={0.8}
+                onPress={handleSubmit}
+              >
+                <Text style={styles.btnTitle}>Registration</Text>
+              </TouchableOpacity>
+
+              <TouchableOpacity
+                activeOpacity={0.6}
+                onPress={() => navigation.navigate("Login")}
+              >
+                <Text style={styles.navigate}>
+                  Already have an account? Login
+                </Text>
+              </TouchableOpacity>
+            </View>
+          </TouchableWithoutFeedback>
+        </ScrollView>
       </ImageBackground>
     </TouchableWithoutFeedback>
   );
