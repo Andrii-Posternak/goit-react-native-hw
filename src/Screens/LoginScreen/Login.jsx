@@ -11,7 +11,8 @@ import {
   ImageBackground,
   ScrollView,
 } from "react-native";
-import { useNavigation } from "@react-navigation/native";
+import { useDispatch } from "react-redux";
+import { authSignIn } from "../../redux/auth/authOperation";
 import { styles } from "./LoginStyle";
 
 const initialState = {
@@ -19,14 +20,14 @@ const initialState = {
   password: "",
 };
 
-export const Login = () => {
+export const Login = ({ navigation }) => {
   const [formData, setFormData] = useState(initialState);
   const [showPassword, setShowPassword] = useState(true);
   const [padding, setPadding] = useState(144);
   const [isInputEmailInFocus, setIsInputEmailInFocus] = useState(false);
   const [isInputPasswordInFocus, setIsInputPasswordInFocus] = useState(false);
 
-  const navigation = useNavigation();
+  const dispatch = useDispatch();
 
   const handleChangeEmail = (value) =>
     setFormData((prevState) => ({ ...prevState, email: value }));
@@ -47,10 +48,11 @@ export const Login = () => {
   };
 
   const handleSubmit = () => {
-    console.log(formData);
+    // console.log(formData);
     setFormData(initialState);
     hideKeyboard();
-    navigation.navigate("Home");
+    // navigation.navigate("Home");
+    dispatch(authSignIn(formData));
   };
 
   useEffect(() => {

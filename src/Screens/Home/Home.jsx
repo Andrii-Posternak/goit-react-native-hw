@@ -1,3 +1,4 @@
+import { useDispatch } from "react-redux";
 import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
 import { TouchableOpacity, View } from "react-native";
 import {
@@ -6,6 +7,7 @@ import {
   Feather,
   MaterialIcons,
 } from "@expo/vector-icons";
+import { authSignOut } from "../../redux/auth/authOperation";
 import { PostsScreen } from "../PostsScreen/PostsScreen";
 import { CreatePostsScreen } from "../CreatePostsScreen/CreatePostsScreen";
 import { ProfileScreen } from "../ProfileScreen/ProfileScreen";
@@ -15,9 +17,15 @@ const HomeTab = createBottomTabNavigator();
 let isCameraOpen;
 
 export const Home = ({ navigation, route }) => {
+  const dispatch = useDispatch();
+
   if (route.params) {
     isCameraOpen = route.params.isCameraOpen;
   }
+
+  const logout = () => {
+    dispatch(authSignOut());
+  };
 
   return (
     <HomeTab.Navigator
@@ -39,7 +47,7 @@ export const Home = ({ navigation, route }) => {
             <TouchableOpacity
               style={{ right: 16 }}
               activeOpacity={0.5}
-              onPress={() => console.log("log out")}
+              onPress={logout}
             >
               <MaterialIcons name="logout" size={24} color="#BDBDBD" />
             </TouchableOpacity>

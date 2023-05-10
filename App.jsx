@@ -1,17 +1,9 @@
 import "react-native-gesture-handler";
+import { Provider } from "react-redux";
 import { ActivityIndicator } from "react-native";
 import { useFonts } from "expo-font";
-import { NavigationContainer } from "@react-navigation/native";
-import { createStackNavigator } from "@react-navigation/stack";
-import { Register } from "./src/Screens/RegistrationScreen/Register";
-import { Login } from "./src/Screens/LoginScreen/Login";
-import { Home } from "./src/Screens/Home/Home";
-import { CommentsScreen } from "./src/Screens/CommentsScreen/CommentsScreen";
-import { MapScreen } from "./src/Screens/MapScreen/MapScreen";
-import { styles } from "./src/Screens/Home/HomeStyle";
-
-const AuthStack = createStackNavigator();
-const MainStack = createStackNavigator();
+import { store } from "./src/redux/store";
+import { Main } from "./src/components/Main/Main";
 
 export default function App() {
   const [fontsLoaded] = useFonts({
@@ -35,50 +27,9 @@ export default function App() {
     );
   }
 
-  const isAuth = true;
-
   return (
-    <NavigationContainer>
-      {isAuth ? (
-        <MainStack.Navigator initialRouteName="Home">
-          <MainStack.Screen
-            name="Home"
-            component={Home}
-            options={{ headerShown: false }}
-          />
-          <MainStack.Screen
-            options={{
-              headerStyle: styles.header,
-              headerTitleAlign: "center",
-              headerTitleStyle: styles.headerTitle,
-            }}
-            name="Comments"
-            component={CommentsScreen}
-          />
-          <MainStack.Screen
-            options={{
-              headerStyle: styles.header,
-              headerTitleAlign: "center",
-              headerTitleStyle: styles.headerTitle,
-            }}
-            name="Map"
-            component={MapScreen}
-          />
-        </MainStack.Navigator>
-      ) : (
-        <AuthStack.Navigator initialRouteName="Login">
-          <AuthStack.Screen
-            name="Register"
-            component={Register}
-            options={{ headerShown: false }}
-          />
-          <AuthStack.Screen
-            name="Login"
-            component={Login}
-            options={{ headerShown: false }}
-          />
-        </AuthStack.Navigator>
-      )}
-    </NavigationContainer>
+    <Provider store={store}>
+      <Main />
+    </Provider>
   );
 }
