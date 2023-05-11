@@ -4,6 +4,7 @@ const authInitialState = {
   userId: null,
   userName: null,
   userEmail: null,
+  userAvatar: null,
   isAuth: false,
 };
 
@@ -16,7 +17,7 @@ export const authSlice = createSlice({
       userId: payload.userId,
       userName: payload.userName,
       userEmail: payload.userEmail,
-      // isAuth: true,
+      userAvatar: payload.userAvatar,
     }),
 
     logout: (state, { payload }) => ({
@@ -37,4 +38,5 @@ export const { updateUserProfile, logout, authStateChange } = authSlice.actions;
 export const selectUserId = (state) => state.auth.userId;
 export const selectUserName = (state) => state.auth.userName;
 export const selectUserEmail = (state) => state.auth.userEmail;
+export const selectUserAvatar = (state) => state.auth.userAvatar;
 export const selectIsAuth = (state) => state.auth.isAuth;

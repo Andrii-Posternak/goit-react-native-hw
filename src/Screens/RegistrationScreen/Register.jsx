@@ -16,6 +16,7 @@ import { useDispatch } from "react-redux";
 import { authSignUp } from "../../redux/auth/authOperation";
 import { AvatarForm } from "../../components/AvatarForm/AvatarForm";
 import { styles } from "./RegisterStyle";
+import { uploadAvatarToServer } from "../../api/uploadAvatarToServer";
 
 const initialState = {
   login: "",
@@ -24,9 +25,15 @@ const initialState = {
 };
 
 export const Register = () => {
+  //form
   const [formData, setFormData] = useState(initialState);
+  const [userAvatar, setUserAvatar] = useState(null);
+
+  // keyboard
   const [showPassword, setShowPassword] = useState(true);
   const [padding, setPadding] = useState(80);
+
+  //input
   const [isInputLoginInFocus, setIsInputLoginInFocus] = useState(false);
   const [isInputEmailInFocus, setIsInputEmailInFocus] = useState(false);
   const [isInputPasswordInFocus, setIsInputPasswordInFocus] = useState(false);
@@ -59,12 +66,24 @@ export const Register = () => {
     Keyboard.dismiss();
   };
 
-  const handleSubmit = () => {
-    // console.log(formData);
-    setFormData(initialState);
-    hideKeyboard();
-    // navigation.navigate("Home");
-    dispatch(authSignUp(formData));
+  const hasData = () => {
+    if (formData.login && formData.email && formData.password && userAvatar) {
+      return true;
+    }
+    return false;
+  };
+
+  const handleSubmit = async () => {
+    if (!hasData()) return alert("Add photo and fill in all fields");
+    try {
+      setFormData(initialState);
+      setUserAvatar(null);
+      hideKeyboard();
+      const userAvatarUrl = await uploadAvatarToServer(userAvatar);
+      dispatch(authSignUp({ ...formData, userAvatar: userAvatarUrl }));
+    } catch (error) {
+      alert(error.message);
+    }
   };
 
   useEffect(() => {
@@ -89,9 +108,8 @@ export const Register = () => {
         source={require("../../images/background.png")}
       >
         <ScrollView style={styles.scrollBox}>
-          {/* <TouchableWithoutFeedback onPress={hideKeyboard}> */}
           <View style={{ ...styles.form, paddingBottom: padding }}>
-            <AvatarForm />
+            <AvatarForm userAvatar={userAvatar} setUserAvatar={setUserAvatar} />
             <Text style={styles.titleForm}>Registration</Text>
 
             <KeyboardAvoidingView
@@ -166,7 +184,6 @@ export const Register = () => {
               </Text>
             </TouchableOpacity>
           </View>
-          {/* </TouchableWithoutFeedback> */}
         </ScrollView>
       </ImageBackground>
     </TouchableWithoutFeedback>

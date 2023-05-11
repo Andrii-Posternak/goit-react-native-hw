@@ -47,11 +47,17 @@ export const Login = ({ navigation }) => {
     Keyboard.dismiss();
   };
 
+  const hasData = () => {
+    if (formData.email && formData.password) {
+      return true;
+    }
+    return false;
+  };
+
   const handleSubmit = () => {
-    // console.log(formData);
+    if (!hasData()) return alert("Enter email and password");
     setFormData(initialState);
     hideKeyboard();
-    // navigation.navigate("Home");
     dispatch(authSignIn(formData));
   };
 

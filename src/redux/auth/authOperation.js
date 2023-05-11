@@ -9,17 +9,22 @@ import { auth } from "../../firebase/config";
 import { updateUserProfile, authStateChange, logout } from "./authSlice";
 
 export const authSignUp =
-  ({ login, email, password }) =>
+  ({ login, email, password, userAvatar }) =>
   async (dispatch, getState) => {
     try {
       await createUserWithEmailAndPassword(auth, email, password);
-      await updateProfile(auth.currentUser, { displayName: login });
+      await updateProfile(auth.currentUser, {
+        displayName: login,
+        photoURL: userAvatar,
+      });
 
       const user = auth.currentUser;
+      console.log("operation==>", user);
       const payload = {
         userId: user.uid,
         userName: user.displayName,
         userEmail: user.email,
+        userAvatar: user.photoURL,
       };
 
       dispatch(updateUserProfile(payload));
@@ -32,13 +37,14 @@ export const authSignIn =
   ({ email, password }) =>
   async (dispatch, getState) => {
     try {
-      console.log("inside login");
       const { user } = await signInWithEmailAndPassword(auth, email, password);
+      console.log("inside login", user);
 
       const payload = {
         userId: user.uid,
         userName: user.displayName,
         userEmail: user.email,
+        userAvatar: user.photoURL,
       };
 
       dispatch(updateUserProfile(payload));
@@ -64,7 +70,9 @@ export const getCurrentUser = () => async (dispatch, getState) => {
           userId: user.uid,
           userName: user.displayName,
           userEmail: user.email,
+          userAvatar: user.photoURL,
         };
+        console.log("currnt==>", user.photoURL);
 
         dispatch(updateUserProfile(payload));
         dispatch(authStateChange({ isAuth: true }));

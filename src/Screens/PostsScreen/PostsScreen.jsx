@@ -1,4 +1,5 @@
 import { useEffect, useState } from "react";
+import { useSelector } from "react-redux";
 import {
   Button,
   View,
@@ -9,10 +10,18 @@ import {
   TouchableOpacity,
 } from "react-native";
 import { EvilIcons, SimpleLineIcons } from "@expo/vector-icons";
+import {
+  selectUserAvatar,
+  selectUserEmail,
+  selectUserName,
+} from "../../redux/auth/authSlice";
 import { styles } from "./PostsScreenStyle";
 
 export const PostsScreen = ({ navigation, route }) => {
   const [posts, setPosts] = useState([]);
+  const userAvatar = useSelector(selectUserAvatar);
+  const userName = useSelector(selectUserName);
+  const userEmail = useSelector(selectUserEmail);
 
   useEffect(() => {
     if (route.params) {
@@ -24,14 +33,11 @@ export const PostsScreen = ({ navigation, route }) => {
     <View style={styles.container}>
       <View style={styles.userInfoWrap}>
         <View style={styles.avatarWrap}>
-          <Image
-            style={styles.avatar}
-            source={require("../../images/background.png")}
-          />
+          <Image style={styles.avatar} source={{ uri: userAvatar }} />
         </View>
         <View style={styles.userInfo}>
-          <Text style={styles.userName}>User Name</Text>
-          <Text style={styles.userEmail}>User Email</Text>
+          <Text style={styles.userName}>{userName}</Text>
+          <Text style={styles.userEmail}>{userEmail}</Text>
         </View>
       </View>
 
