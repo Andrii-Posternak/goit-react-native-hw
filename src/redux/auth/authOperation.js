@@ -32,6 +32,7 @@ export const authSignIn =
   ({ email, password }) =>
   async (dispatch, getState) => {
     try {
+      console.log("inside login");
       const { user } = await signInWithEmailAndPassword(auth, email, password);
 
       const payload = {

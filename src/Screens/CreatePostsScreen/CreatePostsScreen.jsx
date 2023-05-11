@@ -1,4 +1,7 @@
 import { useEffect, useState } from "react";
+import { storage } from "../../firebase/config";
+import { ref, uploadBytes, getDownloadURL } from "firebase/storage";
+import { collection, addDoc } from "firebase/firestore";
 import {
   Dimensions,
   Image,
@@ -139,6 +142,25 @@ export const CreatePostsScreen = ({ navigation }) => {
     }
   };
 
+  const uploadPhotoToServer = async (image) => {
+    try {
+      const response = await fetch(image);
+      const file = await response.blob();
+
+      const uniqueID = Date.now().toString();
+      const storageRef = ref(storage, `postImage/${uniqueID}`);
+
+      const res = await uploadBytes(storageRef, file);
+
+      // get url
+      const postImageUrl = await getDownloadURL(storageRef);
+
+      return postImageUrl;
+    } catch (error) {
+      alert(error.message);
+    }
+  };
+
   const hasData = () => {
     if (photo && description && location.name) {
       return true;
@@ -152,12 +174,13 @@ export const CreatePostsScreen = ({ navigation }) => {
     setLocation(initialState);
   };
 
-  const publishPost = () => {
+  const publishPost = async () => {
     if (!hasData()) {
       alert("Add photo and fill in all fields");
     } else {
       deletePost();
-      navigation.navigate("Posts", { photo, description, location });
+      const photoUrl = await uploadPhotoToServer(photo);
+      navigation.navigate("Posts", { photoUrl, description, location });
     }
   };
 
