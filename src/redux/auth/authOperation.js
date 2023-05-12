@@ -19,7 +19,6 @@ export const authSignUp =
       });
 
       const user = auth.currentUser;
-      console.log("operation==>", user);
       const payload = {
         userId: user.uid,
         userName: user.displayName,
@@ -38,7 +37,6 @@ export const authSignIn =
   async (dispatch, getState) => {
     try {
       const { user } = await signInWithEmailAndPassword(auth, email, password);
-      console.log("inside login", user);
 
       const payload = {
         userId: user.uid,
@@ -72,7 +70,6 @@ export const getCurrentUser = () => async (dispatch, getState) => {
           userEmail: user.email,
           userAvatar: user.photoURL,
         };
-        console.log("currnt==>", user.photoURL);
 
         dispatch(updateUserProfile(payload));
         dispatch(authStateChange({ isAuth: true }));

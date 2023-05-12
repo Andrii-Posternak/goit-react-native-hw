@@ -1,5 +1,6 @@
 import { useEffect, useState } from "react";
 import { useSelector } from "react-redux";
+import { collection, addDoc, getDocs } from "firebase/firestore";
 import {
   Button,
   View,
@@ -10,6 +11,7 @@ import {
   TouchableOpacity,
 } from "react-native";
 import { EvilIcons, SimpleLineIcons } from "@expo/vector-icons";
+import { db } from "../../firebase/config";
 import {
   selectUserAvatar,
   selectUserEmail,
@@ -19,15 +21,37 @@ import { styles } from "./PostsScreenStyle";
 
 export const PostsScreen = ({ navigation, route }) => {
   const [posts, setPosts] = useState([]);
+
   const userAvatar = useSelector(selectUserAvatar);
   const userName = useSelector(selectUserName);
   const userEmail = useSelector(selectUserEmail);
 
   useEffect(() => {
-    if (route.params) {
-      setPosts((prevState) => [route.params, ...prevState]);
+    (async () => {
+      setPosts(await getAllPost());
+    })();
+  }, []);
+
+  const getAllPost = async () => {
+    try {
+      const querySnapshot = await getDocs(collection(db, "posts"));
+
+      const posts = querySnapshot.docs.map((doc) => ({
+        ...doc.data(),
+        postId: doc.id,
+      }));
+
+      return posts;
+    } catch (error) {
+      alert(error.message);
     }
-  }, [route.params]);
+  };
+
+  // useEffect(() => {
+  //   if (route.params) {
+  //     setPosts((prevState) => [route.params, ...prevState]);
+  //   }
+  // }, [route.params]);
 
   return (
     <View style={styles.container}>
@@ -47,14 +71,14 @@ export const PostsScreen = ({ navigation, route }) => {
         renderItem={({ item }) => (
           <View style={styles.postContainer}>
             <View style={styles.imageWrap}>
-              <Image style={styles.image} source={{ uri: item.photo }} />
+              <Image style={styles.image} source={{ uri: item.photoUrl }} />
             </View>
             <Text style={styles.textDescription}>{item.description}</Text>
             <View style={styles.postInfoWrap}>
               <View style={styles.infoWrap}>
                 <TouchableOpacity
                   onPress={() =>
-                    navigation.navigate("Comments", { photo: item.photo })
+                    navigation.navigate("Comments", { photo: item.photoUrl })
                   }
                 >
                   <EvilIcons name="comment" size={24} color="#BDBDBD" />

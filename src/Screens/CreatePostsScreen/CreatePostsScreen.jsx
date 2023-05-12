@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
+import { useSelector } from "react-redux";
 import { ref, uploadBytes, getDownloadURL } from "firebase/storage";
-import { storage } from "../../firebase/config";
 import { collection, addDoc } from "firebase/firestore";
 import {
   Dimensions,
@@ -25,6 +25,9 @@ import { Camera, CameraType } from "expo-camera";
 import * as Location from "expo-location";
 import * as MediaLibrary from "expo-media-library";
 import * as ImagePicker from "expo-image-picker";
+import { storage } from "../../firebase/config";
+import { db } from "../../firebase/config";
+import { selectUserId, selectUserName } from "../../redux/auth/authSlice";
 import { styles } from "./CreatePostsScreenStyle";
 
 const initialState = {
@@ -51,6 +54,9 @@ export const CreatePostsScreen = ({ navigation }) => {
 
   //all permissions
   const [hasPermission, setHasPermission] = useState(null);
+
+  const userId = useSelector(selectUserId);
+  const userName = useSelector(selectUserName);
 
   useEffect(() => {
     navigation.navigate("Home", { isCameraOpen });
@@ -148,7 +154,6 @@ export const CreatePostsScreen = ({ navigation }) => {
       const file = await response.blob();
 
       const uniqueID = Date.now().toString();
-      console.log("uniqueID==>", uniqueID);
       const storageRef = ref(storage, `postImage/${uniqueID}`);
 
       const res = await uploadBytes(storageRef, file);
@@ -169,7 +174,18 @@ export const CreatePostsScreen = ({ navigation }) => {
     return false;
   };
 
-  const deletePost = () => {
+  const uploadPostToServer = async () => {
+    try {
+      const photoUrl = await uploadPhotoToServer(photo);
+      const post = { photoUrl, description, location, userId, userName };
+
+      const docRef = await addDoc(collection(db, "posts"), post);
+    } catch (error) {
+      alert(error.message);
+    }
+  };
+
+  const resetPostForm = () => {
     setPhoto(null);
     setDescription(null);
     setLocation(initialState);
@@ -180,10 +196,12 @@ export const CreatePostsScreen = ({ navigation }) => {
       if (!hasData()) {
         alert("Add photo and fill in all fields");
       } else {
-        deletePost();
-        const photoUrl = await uploadPhotoToServer(photo);
-        console.log("photoUrl==>", photoUrl);
-        navigation.navigate("Posts", { photoUrl, description, location });
+        resetPostForm();
+        await uploadPostToServer();
+
+        // const photoUrl = await uploadPhotoToServer(photo);
+        // navigation.navigate("Posts", { photoUrl, description, location });
+        navigation.navigate("Posts");
       }
     } catch (error) {
       alert(error.message);
@@ -327,7 +345,7 @@ export const CreatePostsScreen = ({ navigation }) => {
             <TouchableOpacity
               style={styles.deleteBtn}
               activeOpacity={0.5}
-              onPress={deletePost}
+              onPress={resetPostForm}
             >
               <Feather name="trash-2" size={24} color="#BDBDBD" />
             </TouchableOpacity>
