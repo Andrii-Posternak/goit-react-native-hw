@@ -1,7 +1,7 @@
 import { useEffect, useState } from "react";
 import { useSelector } from "react-redux";
 import { ref, uploadBytes, getDownloadURL } from "firebase/storage";
-import { collection, addDoc } from "firebase/firestore";
+import { collection, addDoc, serverTimestamp } from "firebase/firestore";
 import {
   Dimensions,
   Image,
@@ -179,7 +179,10 @@ export const CreatePostsScreen = ({ navigation }) => {
       const photoUrl = await uploadPhotoToServer(photo);
       const post = { photoUrl, description, location, userId, userName };
 
-      const docRef = await addDoc(collection(db, "posts"), post);
+      const docRef = await addDoc(collection(db, "posts"), {
+        ...post,
+        createdAt: serverTimestamp(),
+      });
     } catch (error) {
       alert(error.message);
     }

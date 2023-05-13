@@ -3,37 +3,6 @@ import { Dimensions, StyleSheet } from "react-native";
 const { width, height } = Dimensions.get("window");
 
 export const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    paddingHorizontal: 16,
-    paddingTop: 32,
-    paddingBottom: 16,
-    backgroundColor: "#ffffff",
-  },
-
-  imageWrap: {
-    width: "100%",
-    height: 240,
-    borderRadius: 8,
-    overflow: "hidden",
-
-    alignItems: "center",
-    justifyContent: "center",
-
-    marginBottom: 32,
-  },
-
-  image: {
-    width: "100%",
-    height: "100%",
-  },
-
-  commentContainer: {
-    flexGrow: 1,
-
-    marginBottom: 24,
-  },
-
   commentWrap: {
     flexDirection: "row",
 
@@ -115,50 +84,5 @@ export const styles = StyleSheet.create({
     justifyContent: "center",
 
     marginLeft: 16,
-  },
-
-  inputWrap: {
-    position: "relative",
-
-    // marginTop: "auto",
-  },
-
-  newComment: {
-    width: "100%",
-    height: 50,
-    borderWidth: 1,
-    borderRadius: 25,
-    borderColor: "#E8E8E8",
-    backgroundColor: "#F6F6F6",
-
-    paddingVertical: 16,
-    paddingLeft: 16,
-    paddingRight: 50,
-
-    fontFamily: "Roboto-Regular",
-    fontStyle: "normal",
-    fontSize: 16,
-    lineHeight: 19,
-    color: "#212121",
-  },
-
-  inFocus: {
-    borderColor: "#FF6C00",
-    backgroundColor: "#ffffff",
-  },
-
-  sendBtn: {
-    position: "absolute",
-    top: "50%",
-    right: 8,
-    transform: [{ translateY: -17 }],
-
-    width: 34,
-    height: 34,
-    borderRadius: 17,
-    backgroundColor: "#FF6C00",
-
-    justifyContent: "center",
-    alignItems: "center",
   },
 });

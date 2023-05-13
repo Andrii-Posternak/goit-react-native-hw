@@ -1,5 +1,6 @@
-import { useEffect, useState } from "react";
+import { useCallback, useEffect, useState } from "react";
 import { useSelector } from "react-redux";
+import { useFocusEffect } from "@react-navigation/native";
 import { collection, addDoc, getDocs } from "firebase/firestore";
 import {
   Button,
@@ -26,11 +27,25 @@ export const PostsScreen = ({ navigation, route }) => {
   const userName = useSelector(selectUserName);
   const userEmail = useSelector(selectUserEmail);
 
-  useEffect(() => {
-    (async () => {
-      setPosts(await getAllPost());
-    })();
-  }, []);
+  // useEffect(() => {
+  //   (async () => {
+  //     setPosts(await getAllPost());
+  //   })();
+  // }, []);
+
+  // useFocusEffect(
+  //   useCallback(() => {
+  //     (async () => {
+  //       setPosts(await getAllPost());
+  //     })();
+  //   }, [])
+  // );
+
+  useFocusEffect(
+    useCallback(() => {
+      getAllPost();
+    }, [getDocs(collection(db, "posts"))])
+  );
 
   const getAllPost = async () => {
     try {
@@ -41,17 +56,26 @@ export const PostsScreen = ({ navigation, route }) => {
         postId: doc.id,
       }));
 
-      return posts;
+      setPosts(posts);
     } catch (error) {
       alert(error.message);
     }
   };
 
-  // useEffect(() => {
-  //   if (route.params) {
-  //     setPosts((prevState) => [route.params, ...prevState]);
+  // const getAllPost = async () => {
+  //   try {
+  //     const querySnapshot = await getDocs(collection(db, "posts"));
+
+  //     const posts = querySnapshot.docs.map((doc) => ({
+  //       ...doc.data(),
+  //       postId: doc.id,
+  //     }));
+
+  //     return posts;
+  //   } catch (error) {
+  //     alert(error.message);
   //   }
-  // }, [route.params]);
+  // };
 
   return (
     <View style={styles.container}>
@@ -78,7 +102,10 @@ export const PostsScreen = ({ navigation, route }) => {
               <View style={styles.infoWrap}>
                 <TouchableOpacity
                   onPress={() =>
-                    navigation.navigate("Comments", { photo: item.photoUrl })
+                    navigation.navigate("Comments", {
+                      photo: item.photoUrl,
+                      postId: item.postId,
+                    })
                   }
                 >
                   <EvilIcons name="comment" size={24} color="#BDBDBD" />
