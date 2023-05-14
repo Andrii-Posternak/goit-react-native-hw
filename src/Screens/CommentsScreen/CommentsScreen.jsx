@@ -9,6 +9,7 @@ import {
   updateDoc,
   query,
   orderBy,
+  doc,
 } from "firebase/firestore";
 import {
   View,
@@ -42,6 +43,7 @@ export const CommentsScreen = ({ route }) => {
 
   useEffect(() => {
     (async () => {
+      console.log("useeffect commentScreen");
       setAllComments(await getAllComment(postId));
     })();
   }, []);
@@ -92,9 +94,15 @@ export const CommentsScreen = ({ route }) => {
 
   const getAllComment = async (postId) => {
     try {
-      const querySnapshot = await getDocs(
-        collection(db, `posts/${postId}`, "comments")
+      const q = query(
+        collection(db, `posts/${postId}`, "comments"),
+        orderBy("createdAt")
       );
+      const querySnapshot = await getDocs(q);
+
+      // const querySnapshot = await getDocs(
+      //   collection(db, `posts/${postId}`, "comments")
+      // );
 
       const comments = querySnapshot.docs.map((doc) => ({
         ...doc.data(),
@@ -107,14 +115,27 @@ export const CommentsScreen = ({ route }) => {
     }
   };
 
+  // const countComment = () => {
+  //   return allComments.length;
+  // };
+
+  const updateCommentCount = async () => {
+    const docRef = doc(db, "posts", postId);
+
+    await updateDoc(docRef, {
+      comments: allComments.length + 1,
+    });
+    console.log("updateCommentCount");
+  };
+
   const addComment = async () => {
+    if (!comment) {
+      alert("Enter your comment");
+    }
     Keyboard.dismiss();
     setComment("");
     await uploadCommentToServer();
-  };
-
-  const countComment = () => {
-    return allComments.length;
+    await updateCommentCount();
   };
 
   return (
@@ -123,6 +144,10 @@ export const CommentsScreen = ({ route }) => {
         <View style={styles.imageWrap}>
           <Image style={styles.image} source={{ uri: photo }} />
         </View>
+
+        {!allComments.length && (
+          <Text style={styles.noComment}>No comments yet!</Text>
+        )}
 
         <FlatList
           style={styles.commentContainer}

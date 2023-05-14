@@ -51,6 +51,17 @@ export const styles = StyleSheet.create({
     color: "#212121cc",
   },
 
+  noPost: {
+    fontFamily: "Roboto-Medium",
+    fontStyle: "normal",
+    fontSize: 16,
+    lineHeight: 19,
+    textAlign: "center",
+    color: "#212121",
+
+    marginTop: 100,
+  },
+
   //post
   postContainer: {
     marginBottom: 32,
@@ -86,7 +97,13 @@ export const styles = StyleSheet.create({
   postInfoWrap: {
     flexDirection: "row",
     justifyContent: "space-between",
-    // alignItems: "center",
+    alignItems: "center",
+  },
+
+  socialWrap: {
+    flexDirection: "row",
+    alignItems: "center",
+    gap: 24,
   },
 
   infoWrap: {
@@ -95,7 +112,11 @@ export const styles = StyleSheet.create({
     gap: 6,
   },
 
-  textComment: {
+  likeIcon: {
+    marginBottom: 5,
+  },
+
+  textSocial: {
     fontFamily: "Roboto-Medium",
     fontStyle: "normal",
     fontSize: 16,

@@ -177,7 +177,15 @@ export const CreatePostsScreen = ({ navigation }) => {
   const uploadPostToServer = async () => {
     try {
       const photoUrl = await uploadPhotoToServer(photo);
-      const post = { photoUrl, description, location, userId, userName };
+      const post = {
+        photoUrl,
+        description,
+        location,
+        userId,
+        userName,
+        comments: 0,
+        likes: 0,
+      };
 
       const docRef = await addDoc(collection(db, "posts"), {
         ...post,

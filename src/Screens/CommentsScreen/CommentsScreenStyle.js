@@ -28,6 +28,17 @@ export const styles = StyleSheet.create({
     height: "100%",
   },
 
+  noComment: {
+    fontFamily: "Roboto-Medium",
+    fontStyle: "normal",
+    fontSize: 16,
+    lineHeight: 19,
+    textAlign: "center",
+    color: "#212121",
+
+    marginTop: 100,
+  },
+
   commentContainer: {
     flexGrow: 1,
 

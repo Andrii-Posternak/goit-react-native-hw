@@ -19,3 +19,12 @@ export const uploadAvatarToServer = async (image) => {
     alert(error.message);
   }
 };
+
+export const deleteImageFromServer = async (image) => {
+  const idx = image.indexOf("?");
+  const uniqueID = image.slice(idx - 13, idx);
+
+  const desertRef = ref(storage, `userAvatar/${uniqueID}`);
+
+  await deleteObject(desertRef);
+};
