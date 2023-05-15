@@ -10,6 +10,7 @@ import {
   query,
   orderBy,
   doc,
+  onSnapshot,
 } from "firebase/firestore";
 import {
   View,
@@ -41,24 +42,30 @@ export const CommentsScreen = ({ route }) => {
   const userAvatar = useSelector(selectUserAvatar);
   const userId = useSelector(selectUserId);
 
+  //worked=====================
   useEffect(() => {
     (async () => {
-      console.log("useeffect commentScreen");
       setAllComments(await getAllComment(postId));
     })();
   }, []);
+  //============================
+  // useEffect(() => {
+  //   getAllComment(postId);
+  // }, []);
+  //=============================
+
+  // useFocusEffect(
+  //   useCallback(() => {
+  //     getAllComment(postId);
+  //   }, [])
+  // );
 
   // useFocusEffect(
   //   useCallback(() => {
   //     (async () => {
   //       setAllComments(await getAllComment(postId));
   //     })();
-  //   }, [getDocs(collection(db, `posts/${postId}`, "comments"))])
-  // );
-
-  // useFocusEffect(
-  //   useCallback(() => {
-  //     getAllComment(postId);
+  //     // }, [getDocs(collection(db, `posts/${postId}`, "comments"))])
   //   }, [])
   // );
 
@@ -75,23 +82,7 @@ export const CommentsScreen = ({ route }) => {
     }
   };
 
-  // const getAllComment = async (postId) => {
-  //   try {
-  //     const querySnapshot = await getDocs(
-  //       collection(db, `posts/${postId}`, "comments")
-  //     );
-
-  //     const comments = querySnapshot.docs.map((doc) => ({
-  //       ...doc.data(),
-  //       commentId: doc.id,
-  //     }));
-
-  //     setAllComments(comments);
-  //   } catch (error) {
-  //     alert(error.message);
-  //   }
-  // };
-
+  //worked=======================
   const getAllComment = async (postId) => {
     try {
       const q = query(
@@ -114,10 +105,52 @@ export const CommentsScreen = ({ route }) => {
       alert(error.message);
     }
   };
+  //===========================================
 
-  // const countComment = () => {
-  //   return allComments.length;
+  // const getAllComment = async (postId) => {
+  //   try {
+  //     const q = query(
+  //       collection(db, `posts/${postId}`, "comments"),
+  //       orderBy("createdAt")
+  //     );
+  //     // const querySnapshot = await getDocs(q);
+  //     const docRef = doc(db, "posts", postId);
+
+  //     onSnapshot(q, (querySnapshot) => {
+  //       // setAllComments(
+  //       //   querySnapshot.docs.map((doc) => ({
+  //       //     ...doc.data(),
+  //       //     postId: doc.id,
+  //       //   }))
+  //       // );
+  //       const comments = querySnapshot.docs.map((doc) => ({
+  //         ...doc.data(),
+  //         commentId: doc.id,
+  //       }));
+  //       setAllComments(comments);
+  //     });
+  //     // console.log("result==>", result);
+
+  //     // const unsubscribe = onSnapshot(q, (querySnapshot) => {
+  //     //   console.log("querySnapshot==>", querySnapshot);
+  //     //   const comments = querySnapshot.docs.map((doc) => ({
+  //     //     ...doc.data(),
+  //     //     commentId: doc.id,
+  //     //   }));
+  //     //   return comments;
+  //     // });
+  //     // const comments = querySnapshot.docs.map((doc) => ({
+  //     //   ...doc.data(),
+  //     //   commentId: doc.id,
+  //     // }));
+
+  //     // return comments;
+  //     // return unsubscribe();
+  //   } catch (error) {
+  //     alert(error.message);
+  //   }
   // };
+  //=======================================================
 
   const updateCommentCount = async () => {
     const docRef = doc(db, "posts", postId);
@@ -125,7 +158,6 @@ export const CommentsScreen = ({ route }) => {
     await updateDoc(docRef, {
       comments: allComments.length + 1,
     });
-    console.log("updateCommentCount");
   };
 
   const addComment = async () => {
