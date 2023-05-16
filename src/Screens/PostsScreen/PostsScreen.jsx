@@ -104,21 +104,22 @@ export const PostsScreen = ({ navigation, route }) => {
 
   return (
     <View style={styles.container}>
-      <View style={styles.userInfoWrap}>
-        <View style={styles.avatarWrap}>
-          <Image style={styles.avatar} source={{ uri: userAvatar }} />
-        </View>
-        <View style={styles.userInfo}>
-          <Text style={styles.userName}>{userName}</Text>
-          <Text style={styles.userEmail}>{userEmail}</Text>
-        </View>
-      </View>
-
       {!posts.length && <Text style={styles.noPost}>No posts yet!</Text>}
 
       <FlatList
         data={posts}
         keyExtractor={(item, indx) => indx.toString()}
+        ListHeaderComponent={
+          <View style={styles.userInfoWrap}>
+            <View style={styles.avatarWrap}>
+              <Image style={styles.avatar} source={{ uri: userAvatar }} />
+            </View>
+            <View style={styles.userInfo}>
+              <Text style={styles.userName}>{userName}</Text>
+              <Text style={styles.userEmail}>{userEmail}</Text>
+            </View>
+          </View>
+        }
         renderItem={({ item }) => (
           <View style={styles.postContainer}>
             <View style={styles.imageWrap}>

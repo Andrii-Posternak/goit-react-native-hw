@@ -173,10 +173,6 @@ export const CommentsScreen = ({ route }) => {
   return (
     <TouchableWithoutFeedback onPress={() => Keyboard.dismiss()}>
       <View style={styles.container}>
-        <View style={styles.imageWrap}>
-          <Image style={styles.image} source={{ uri: photo }} />
-        </View>
-
         {!allComments.length && (
           <Text style={styles.noComment}>No comments yet!</Text>
         )}
@@ -185,6 +181,11 @@ export const CommentsScreen = ({ route }) => {
           style={styles.commentContainer}
           data={allComments}
           keyExtractor={(item, indx) => indx.toString()}
+          ListHeaderComponent={
+            <View style={styles.imageWrap}>
+              <Image style={styles.image} source={{ uri: photo }} />
+            </View>
+          }
           renderItem={({ item }) => (
             <CommentListItem item={item} userId={userId} />
           )}
